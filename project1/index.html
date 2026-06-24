@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Modern YouTube Clone</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:#0f0f0f;
+    color:white;
+    overflow-x:hidden;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{
+    width:8px;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#444;
+    border-radius:10px;
+}
+
+/* HEADER */
+
+header{
+    width:100%;
+    height:70px;
+    background:#111;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 25px;
+    position:sticky;
+    top:0;
+    z-index:1000;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+.left{
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.menu{
+    font-size:25px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:28px;
+    font-weight:700;
+    color:#ff0000;
+    letter-spacing:1px;
+}
+
+.search-box{
+    width:45%;
+    display:flex;
+    align-items:center;
+}
+
+.search-box input{
+    width:100%;
+    height:45px;
+    border:none;
+    outline:none;
+    background:#181818;
+    color:white;
+    padding:0 20px;
+    border-radius:30px 0 0 30px;
+    font-size:15px;
+    border:1px solid #2d2d2d;
+}
+
+.search-box button{
+    height:45px;
+    width:70px;
+    border:none;
+    background:#272727;
+    color:white;
+    border-radius:0 30px 30px 0;
+    cursor:pointer;
+    transition:0.3s;
+    font-size:18px;
+}
+
+.search-box button:hover{
+    background:#ff0000;
+}
+
+.right{
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+
+.icon{
+    font-size:22px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.icon:hover{
+    transform:scale(1.2);
+    color:#ff0000;
+}
+
+.profile{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:linear-gradient(45deg,#ff0000,#ff7300);
+    cursor:pointer;
+}
+
+/* MAIN LAYOUT */
+
+.container{
+    display:flex;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    width:250px;
+    height:calc(100vh - 70px);
+    background:#111;
+    position:sticky;
+    top:70px;
+    padding:20px 12px;
+    overflow-y:auto;
+    border-right:1px solid rgba(255,255,255,0.08);
+}
+
+.sidebar-item{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    padding:14px 18px;
+    margin-bottom:10px;
+    border-radius:14px;
+    cursor:pointer;
+    transition:0.3s;
+    font-size:15px;
+}
+
+.sidebar-item:hover{
+    background:#1f1f1f;
+    transform:translateX(5px);
+}
+
+.sidebar-item.active{
+    background:#ff0000;
+}
+
+/* CONTENT */
+
+.content{
+    flex:1;
+    padding:25px;
+}
+
+/* CATEGORY */
+
+.categories{
+    display:flex;
+    gap:12px;
+    overflow-x:auto;
+    margin-bottom:25px;
+}
+
+.categories button{
+    border:none;
+    background:#272727;
+    color:white;
+    padding:10px 20px;
+    border-radius:25px;
+    cursor:pointer;
+    white-space:nowrap;
+    transition:0.3s;
+}
+
+.categories button:hover,
+.categories button.active{
+    background:#ff0000;
+}
+
+/* VIDEOS */
+
+.video-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:25px;
+}
+
+.video-card{
+    background:#181818;
+    border-radius:20px;
+    overflow:hidden;
+    cursor:pointer;
+    transition:0.4s;
+    position:relative;
+}
+
+.video-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 15px 40px rgba(255,0,0,0.25);
+}
+
+.thumbnail{
+    position:relative;
+    overflow:hidden;
+}
+
+.thumbnail img{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+    transition:0.5s;
+}
+
+.video-card:hover .thumbnail img{
+    transform:scale(1.08);
+}
+
+.duration{
+    position:absolute;
+    bottom:10px;
+    right:10px;
+    background:rgba(0,0,0,0.8);
+    padding:4px 8px;
+    border-radius:6px;
+    font-size:12px;
+}
+
+.video-info{
+    display:flex;
+    gap:14px;
+    padding:16px;
+}
+
+.channel{
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    background:linear-gradient(45deg,#ff0000,#ff7b00);
+    flex-shrink:0;
+}
+
+.details h3{
+    font-size:17px;
+    margin-bottom:6px;
+    line-height:1.4;
+}
+
+.details p{
+    color:#b3b3b3;
+    font-size:14px;
+    margin-bottom:3px;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+    .sidebar{
+        display:none;
+    }
+
+    .search-box{
+        width:60%;
+    }
+
+}
+
+@media(max-width:600px){
+
+    header{
+        padding:0 12px;
+    }
+
+    .logo{
+        font-size:22px;
+    }
+
+    .search-box{
+        width:50%;
+    }
+
+    .search-box input{
+        height:40px;
+    }
+
+    .search-box button{
+        height:40px;
+        width:55px;
+    }
+
+    .video-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header>
+
+    <div class="left">
+        <div class="menu">☰</div>
+        <div class="logo">YouTube</div>
+    </div>
+
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search videos...">
+        <button onclick="searchVideos()">🔍</button>
+    </div>
+
+    <div class="right">
+        <div class="icon">🎥</div>
+        <div class="icon">🔔</div>
+        <div class="profile"></div>
+    </div>
+
+</header>
+
+<!-- MAIN -->
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-item active">🏠 Home</div>
+        <div class="sidebar-item">🔥 Trending</div>
+        <div class="sidebar-item">🎵 Music</div>
+        <div class="sidebar-item">🎮 Gaming</div>
+        <div class="sidebar-item">📚 Learning</div>
+        <div class="sidebar-item">📰 News</div>
+        <div class="sidebar-item">🏆 Sports</div>
+        <div class="sidebar-item">⚙ Settings</div>
+
+    </aside>
+
+    <!-- CONTENT -->
+
+    <div class="content">
+
+        <!-- CATEGORIES -->
+
+        <div class="categories">
+            <button class="active">All</button>
+            <button>Programming</button>
+            <button>Music</button>
+            <button>Gaming</button>
+            <button>Live</button>
+            <button>AI</button>
+            <button>Web Dev</button>
+            <button>Sports</button>
+        </div>
+
+        <!-- VIDEOS -->
+
+        <div class="video-grid" id="videoGrid">
+
+            <!-- CARD -->
+
+            <div class="video-card" data-title="Modern JavaScript Tutorial">
+                <div class="thumbnail">
+                    <img src="https://picsum.photos/600/400?1">
+                    <div class="duration">12:30</div>
+                </div>
+
+                <div class="video-info">
+                    <div class="channel"></div>
+
+                    <div class="details">
+                        <h3>Modern JavaScript Tutorial For Beginners</h3>
+                        <p>Code World</p>
+                        <p>1.2M views • 2 days ago</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD -->
+
+            <div class="video-card" data-title="React Full Course">
+                <div class="thumbnail">
+                    <img src="https://picsum.photos/600/400?2">
+                    <div class="duration">24:18</div>
+                </div>
+
+                <div class="video-info">
+                    <div class="channel"></div>
+
+                    <div class="details">
+                        <h3>React JS Full Course 2026</h3>
+                        <p>Frontend Pro</p>
+                        <p>845K views • 1 week ago</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD -->
+
+            <div class="video-card" data-title="Gaming Montage">
+                <div class="thumbnail">
+                    <img src="https://picsum.photos/600/400?3">
+                    <div class="duration">08:12</div>
+                </div>
+
+                <div class="video-info">
+                    <div class="channel"></div>
+
+                    <div class="details">
+                        <h3>Epic Gaming Montage</h3>
+                        <p>GameX</p>
+                        <p>2M views • 5 hours ago</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD -->
+
+            <div class="video-card" data-title="UI UX Design">
+                <div class="thumbnail">
+                    <img src="https://picsum.photos/600/400?4">
+                    <div class="duration">18:40</div>
+                </div>
+
+                <div class="video-info">
+                    <div class="channel"></div>
+
+                    <div class="details">
+                        <h3>Beautiful UI/UX Design Tutorial</h3>
+                        <p>Design Hub</p>
+                        <p>420K views • 3 days ago</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD -->
+
+            <div class="video-card" data-title="AI Future">
+                <div class="thumbnail">
+                    <img src="https://picsum.photos/600/400?5">
+                    <div class="duration">10:15</div>
+                </div>
+
+                <div class="video-info">
+                    <div class="channel"></div>
+
+                    <div class="details">
+                        <h3>The Future Of Artificial Intelligence</h3>
+                        <p>Tech Today</p>
+                        <p>650K views • 1 day ago</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD -->
+
+            <div class="video-card" data-title="CSS Animation">
+                <div class="thumbnail">
+                    <img src="https://picsum.photos/600/400?6">
+                    <div class="duration">15:52</div>
+                </div>
+
+                <div class="video-info">
+                    <div class="channel"></div>
+
+                    <div class="details">
+                        <h3>Amazing CSS Animations Tutorial</h3>
+                        <p>Creative Dev</p>
+                        <p>980K views • 6 days ago</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function searchVideos(){
+
+    let input = document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase();
+
+    let cards = document.querySelectorAll(".video-card");
+
+    cards.forEach(card => {
+
+        let title = card.dataset.title.toLowerCase();
+
+        if(title.includes(input)){
+            card.style.display = "block";
+        }else{
+            card.style.display = "none";
+        }
+
+    });
+
+}
+
+/* CATEGORY ACTIVE BUTTON */
+
+const buttons = document.querySelectorAll(".categories button");
+
+buttons.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        buttons.forEach(btn => btn.classList.remove("active"));
+
+        button.classList.add("active");
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>
